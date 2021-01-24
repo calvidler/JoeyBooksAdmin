@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:joey_books_admin_app/screens/add_book_screen.dart';
+import 'package:joey_books_admin_app/screens/display_books_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,8 +16,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: true,
-      initialRoute: AddBookScreen.id,
+      initialRoute: DisplayBooks.id,
       routes: {
+        DisplayBooks.id: (context) => DisplayBooks(),
         AddBookScreen.id: (context) => AddBookScreen(),
         //   LoginScreen.id: (context) => LoginScreen(),
         //   RegistrationScreen.id: (context) => RegistrationScreen(),

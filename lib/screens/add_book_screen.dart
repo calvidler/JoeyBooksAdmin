@@ -29,11 +29,11 @@ class _AddBookScreenState extends State<AddBookScreen> {
   book(Book value) => setState(() => _book = value);
 
   Future<void> createBookRecord() async {
-    CollectionReference books = FirebaseFirestore.instance.collection('books');
+    CollectionReference books = FirebaseFirestore.instance.collection('Books');
     await books
         .add({
           "title": _title,
-          'author': _authour,
+          'authour': _authour,
           'blurb': _blurb,
           'age': _age,
           'category': _category,
@@ -44,24 +44,6 @@ class _AddBookScreenState extends State<AddBookScreen> {
         })
         .then((value) => print("Book Added"))
         .catchError((error) => print("Failed to add book: $error"));
-  }
-
-  String _test = "This is a test";
-  Future<void> getBookRecord() async {
-    CollectionReference books = FirebaseFirestore.instance.collection('books');
-    String auth =
-        await books.where("title", isEqualTo: "pagesTest").limit(1).get().then(
-      (value) {
-        if (value.docs.length > 0) {
-          return (value.docs[0]['pages']['1']);
-        } else {
-          return null;
-        }
-      },
-    );
-    setState(() {
-      _test = auth;
-    });
   }
 
   @override
@@ -76,7 +58,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
         onPressed: () async {
           print("Send! $_title");
 //          await createBookRecord();
-          getBookRecord();
+          createBookRecord();
         },
       ),
       body: Padding(
@@ -85,7 +67,6 @@ class _AddBookScreenState extends State<AddBookScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Text(_test),
             Center(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
