@@ -1,29 +1,31 @@
 import 'dart:html';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:joey_books_admin_app/objects/book.dart';
 import 'package:joey_books_admin_app/objects/book_page.dart';
+import 'package:joey_books_admin_app/components/file_picker.dart';
+import 'package:joey_books_admin_app/domain/csv_loader.dart';
 
 class AddBook extends StatefulWidget {
   FunctionStringCallback title;
   Function authour;
   Function blurb;
   Function age;
-  Function category;
+  Function tags;
   Function book;
 
   AddBook(
-      {this.title,
-      this.blurb,
-      this.authour,
-      this.category,
-      this.age,
-      this.book});
+      {this.title, this.blurb, this.authour, this.tags, this.age, this.book});
   @override
   _AddBookState createState() => _AddBookState();
 }
 
 class _AddBookState extends State<AddBook> {
+  void uploadFile(Uint8List value) {
+    csv_upload(value);
+  }
+
   List<BookPage> bookPages;
   @override
   Widget build(BuildContext context) {
@@ -91,7 +93,7 @@ class _AddBookState extends State<AddBook> {
                   keyboardType: TextInputType.text,
                   textAlign: TextAlign.center,
                   onChanged: (value) {
-                    widget.age(int);
+                    widget.age(value);
                   },
                 ),
               ),
@@ -99,17 +101,20 @@ class _AddBookState extends State<AddBook> {
           ),
           Row(
             children: [
-              Text("CATEGORY: "),
+              Text("TAGS: "),
               Flexible(
                 child: TextField(
                   keyboardType: TextInputType.text,
                   textAlign: TextAlign.center,
                   onChanged: (value) {
-                    widget.category(value);
+                    widget.tags(value);
                   },
                 ),
               ),
             ],
+          ),
+          FilePicker(
+            uploadFileFn: uploadFile,
           ),
         ],
       ),

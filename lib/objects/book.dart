@@ -4,14 +4,14 @@ class Book {
   String title;
   String authour;
   String blurb;
-  int age;
-  String category;
+  String age;
+  String tags;
 
   Book({
     this.title,
     this.authour,
     this.blurb,
     this.age,
-    this.category,
+    this.tags,
   });
 }

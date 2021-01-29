@@ -27,7 +27,7 @@ class _DisplayBooksState extends State<DisplayBooks> {
               authour: value.docs[i]['authour'],
               blurb: value.docs[i]['blurb'],
               age: value.docs[i]['age'],
-              category: value.docs[i]['category'],
+              tags: value.docs[i]['tags'],
             );
             setState(() {
               _books.add(book);
@@ -91,7 +91,7 @@ class _DisplayBooksState extends State<DisplayBooks> {
                 Expanded(child: Text("Authour")),
                 Expanded(child: Text("Blurb")),
                 Expanded(child: Text("Age")),
-                Expanded(child: Text("Category")),
+                Expanded(child: Text("Tags")),
                 Expanded(child: Text("")),
               ],
             ),
@@ -128,7 +128,7 @@ class _DisplayBooksState extends State<DisplayBooks> {
                           child: Text(_books[i].age.toString()),
                         ),
                         Expanded(
-                          child: Text(_books[i].category),
+                          child: Text(_books[i].tags),
                         ),
                         Expanded(
                           child: FlatButton(

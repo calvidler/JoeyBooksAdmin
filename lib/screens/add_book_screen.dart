@@ -23,27 +23,27 @@ class _AddBookScreenState extends State<AddBookScreen> {
   blurb(String value) => setState(() => _blurb = value);
   String _age;
   age(String value) => setState(() => _age = value);
-  String _category;
-  category(String value) => setState(() => _category = value);
+  String _tags;
+  tags(String value) => setState(() => _tags = value);
   Book _book;
   book(Book value) => setState(() => _book = value);
 
   Future<void> createBookRecord() async {
     CollectionReference books = FirebaseFirestore.instance.collection('Books');
-    await books
-        .add({
-          "title": _title,
-          'authour': _authour,
-          'blurb': _blurb,
-          'age': _age,
-          'category': _category,
-          'pages': {
-            '1': "Hello word",
-            "2": "Goodbye World",
-          }
-        })
-        .then((value) => print("Book Added"))
-        .catchError((error) => print("Failed to add book: $error"));
+    await books.add({
+      "title": _title,
+      'authour': _authour,
+      'blurb': _blurb,
+      'age': _age,
+      'tags': _tags,
+      'pages': {
+        '1': "Hello word",
+        "2": "Goodbye World",
+      }
+    }).then((value) {
+      print("Book Added");
+      Navigator.pop(context);
+    }).catchError((error) => print("Failed to add book: $error"));
   }
 
   @override
@@ -74,7 +74,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                   SizedBox(width: 20.0, height: 100.0),
                   RotateAnimatedTextKit(
                     onTap: () {
-                      print("Tap Event");
+                      Navigator.pop(context);
                     },
                     text: ["READ", "LOVE", "JOEY"],
                     textStyle: TextStyle(
@@ -98,7 +98,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                 authour: authour,
                 blurb: blurb,
                 age: age,
-                category: category,
+                tags: tags,
                 book: book,
               ),
             ),
