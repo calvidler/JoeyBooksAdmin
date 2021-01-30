@@ -1,4 +1,4 @@
-import 'package:joey_books_admin_app/objects/book_page.dart';
+import 'book_page.dart';
 
 class Book {
   String title;
@@ -7,6 +7,8 @@ class Book {
   String age;
   String tags;
 
+  List<BookPage> pages = [];
+
   Book({
     this.title,
     this.authour,
@@ -14,4 +16,8 @@ class Book {
     this.age,
     this.tags,
   });
+
+  add_page(BookPage page) {
+    pages.add(page);
+  }
 }

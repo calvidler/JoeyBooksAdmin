@@ -1,29 +1,30 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'dart:html';
 
 class FilePicker extends StatefulWidget {
   Function uploadFileFn;
+  String use;
+  final Widget child;
 
-  FilePicker({this.uploadFileFn});
+  FilePicker({this.uploadFileFn, this.use, @required this.child});
   @override
   _FilePickerState createState() => _FilePickerState();
 }
 
 class _FilePickerState extends State<FilePicker> {
-  Uint8List uploadedCsv;
+  Uint8List uploadedXlsx;
+  Uint8List uploadedImage;
   String option1Text;
-
   _startFilePicker() async {
     InputElement uploadInput = FileUploadInputElement();
     uploadInput.click();
 
     uploadInput.onChange.listen((e) {
-      // read file content as dataURLs
+      // read file content as dataURL
       final files = uploadInput.files;
       if (files.length == 1) {
         final file = files[0];
@@ -31,10 +32,26 @@ class _FilePickerState extends State<FilePicker> {
 
         reader.onLoadEnd.listen((e) {
           setState(() {
-            uploadedCsv = Base64Decoder()
-                .convert(reader.result.toString().split(",").last);
-            // print(utf8.decode(uploadedCsv));
-            widget.uploadFileFn(uploadedCsv);
+            if (widget.use == "excel") {
+//              uploadedXlsx = Base64Decoder()
+//                  .convert(reader.result.toString().split(",").last);
+//              print(utf8.decode(uploadedXlsx));
+              uploadedXlsx = reader.result;
+
+              widget.uploadFileFn(uploadedXlsx);
+            }
+            if (widget.use == "mp3") {
+//              uploadedXlsx = Base64Decoder()
+//                  .convert(reader.result.toString().split(",").last);
+//              print(utf8.decode(uploadedXlsx));
+              uploadedXlsx = reader.result;
+
+              widget.uploadFileFn(uploadedXlsx);
+            }
+            if (widget.use == "image") {
+              uploadedImage = reader.result;
+              widget.uploadFileFn(uploadedImage);
+            }
           });
         });
 
@@ -44,13 +61,13 @@ class _FilePickerState extends State<FilePicker> {
           });
         });
 
-        reader.readAsDataUrl(file);
+        reader.readAsArrayBuffer(file);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(onPressed: _startFilePicker, child: Text("Upload"));
+    return ElevatedButton(onPressed: _startFilePicker, child: widget.child);
   }
 }

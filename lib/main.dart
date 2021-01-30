@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:joey_books_admin_app/screens/add_book_screen.dart';
 import 'package:joey_books_admin_app/screens/display_books_screen.dart';
+import 'package:joey_books_admin_app/screens/book_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +21,8 @@ class MyApp extends StatelessWidget {
       routes: {
         DisplayBooks.id: (context) => DisplayBooks(),
         AddBookScreen.id: (context) => AddBookScreen(),
+        BookScreen.id: (context) => BookScreen(),
+
         //   LoginScreen.id: (context) => LoginScreen(),
         //   RegistrationScreen.id: (context) => RegistrationScreen(),
         //   ProfileScreen.id: (context) => ProfileScreen(),

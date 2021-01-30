@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:joey_books_admin_app/objects/book.dart';
+import 'package:joey_books_admin_app/domain/objects/book.dart';
 import 'package:joey_books_admin_app/screens/add_book_screen.dart';
 import 'package:joey_books_admin_app/components/alert_dialog.dart';
+import 'book_screen.dart';
 
 class DisplayBooks extends StatefulWidget {
   static String id = "display_screen";
@@ -14,6 +15,7 @@ class DisplayBooks extends StatefulWidget {
 
 class _DisplayBooksState extends State<DisplayBooks> {
   List<Book> _books = [];
+  List<bool> _warnings = [];
 
   Future<void> getBookRecord() async {
     CollectionReference db_books =
@@ -23,15 +25,20 @@ class _DisplayBooksState extends State<DisplayBooks> {
         if (value.docs.length > 0) {
           for (int i = 0; i < value.docs.length; i++) {
             Book book = Book(
-              title: value.docs[i]['title'],
-              authour: value.docs[i]['authour'],
-              blurb: value.docs[i]['blurb'],
-              age: value.docs[i]['age'],
-              tags: value.docs[i]['tags'],
+              title: value.docs[i].get('title'),
+              authour: value.docs[i].get('authour'),
+              blurb: value.docs[i].get('blurb'),
+              age: value.docs[i].get('age'),
+              tags: value.docs[i].get('tags'),
             );
             setState(() {
               _books.add(book);
             });
+            if (value.docs[i].data().containsKey("pages") == false) {
+              _warnings.add(true);
+            } else {
+              _warnings.add(false);
+            }
           }
           //return (value.docs);
         } else {
@@ -39,7 +46,7 @@ class _DisplayBooksState extends State<DisplayBooks> {
           //return null;
         }
       },
-    );
+    ).catchError((error) => print("Failed to get display data: $error"));
   }
 
   Future<void> deleteBookRecord(String title, String authour) async {
@@ -92,6 +99,7 @@ class _DisplayBooksState extends State<DisplayBooks> {
                 Expanded(child: Text("Blurb")),
                 Expanded(child: Text("Age")),
                 Expanded(child: Text("Tags")),
+                Expanded(child: Text("Warning No pages!")),
                 Expanded(child: Text("")),
               ],
             ),
@@ -112,7 +120,7 @@ class _DisplayBooksState extends State<DisplayBooks> {
                   return Container(
                     height: 30,
                     child: Row(
-                      // mainAxisAlignment: MainAxisAlignment.center,
+//                      mainAxisAlignment: MainAxisAlignment.center,
                       // crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Expanded(
@@ -131,7 +139,21 @@ class _DisplayBooksState extends State<DisplayBooks> {
                           child: Text(_books[i].tags),
                         ),
                         Expanded(
-                          child: FlatButton(
+                          child: ElevatedButton(
+                            child: Text("Edit"),
+                            style: ElevatedButton.styleFrom(
+                              primary: _warnings[i] ? Colors.red : Colors.green,
+                            ),
+                            onPressed: () {
+                              // showAlertDialog(context);
+                              print("edit book : ${_books[i].title}");
+                              Navigator.pushNamed(context, BookScreen.id,
+                                  arguments: {'book': _books[i]});
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: ElevatedButton(
                             child: Text("Delete"),
                             onPressed: () {
                               // showAlertDialog(context);
