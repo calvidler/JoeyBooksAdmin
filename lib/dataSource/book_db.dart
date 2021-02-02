@@ -83,7 +83,6 @@ Future<String> getBookID(String bookTitle, String authour) async {
       .get()
       .then((value) {
     value.docs.forEach((element) {
-      print(element.id);
       id = element.id;
     });
   }).catchError((error) => print("Failed to get book: $error"));
@@ -91,12 +90,15 @@ Future<String> getBookID(String bookTitle, String authour) async {
 }
 
 Future<String> getBookImageURL(String bookID, String fieldName) async {
-  String url;
+  String url = "No image";
   await FirebaseFirestore.instance
       .collection('Books')
       .doc(bookID)
       .get()
-      .then((value) => url = value.get(fieldName));
+      .then((value) {
+    url = value.get(fieldName);
+    print("Sucessfull retrieved image ul");
+  }).catchError((error) => print("error retieving image url : $error"));
   return url;
 }
 

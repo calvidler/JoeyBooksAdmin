@@ -47,7 +47,6 @@ class BookBrain {
   }
 
   Future<Book> getBookPages(Book book) async {
-    print("Here");
     return db.getBookPages(book);
   }
 }
