@@ -9,8 +9,10 @@ class FilePicker extends StatefulWidget {
   Function uploadFileFn;
   String use;
   final Widget child;
+  final String pageNumber;
 
-  FilePicker({this.uploadFileFn, this.use, @required this.child});
+  FilePicker(
+      {this.uploadFileFn, this.use, @required this.child, this.pageNumber});
   @override
   _FilePickerState createState() => _FilePickerState();
 }
@@ -47,6 +49,14 @@ class _FilePickerState extends State<FilePicker> {
               uploadedXlsx = reader.result;
 
               widget.uploadFileFn(uploadedXlsx);
+            }
+            if (widget.use == "pagemp3") {
+//              uploadedXlsx = Base64Decoder()
+//                  .convert(reader.result.toString().split(",").last);
+//              print(utf8.decode(uploadedXlsx));
+              uploadedXlsx = reader.result;
+
+              widget.uploadFileFn(uploadedXlsx, widget.pageNumber);
             }
             if (widget.use == "image") {
               uploadedImage = reader.result;

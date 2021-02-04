@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:joey_books_admin_app/components/display_pages.dart';
 import 'package:joey_books_admin_app/domain/objects/book.dart';
 import 'package:joey_books_admin_app/screens/add_book_screen.dart';
 import 'package:joey_books_admin_app/components/alert_dialog.dart';
@@ -49,23 +50,27 @@ class _DisplayBooksState extends State<DisplayBooks> {
     ).catchError((error) => print("Failed to get display data: $error"));
   }
 
-  Future<void> deleteBookRecord(String title, String authour) async {
+  Future<void> deleteBookRecord(
+      String title, String authour, BuildContext context) async {
     await FirebaseFirestore.instance
         .collection("Books")
         .where("title", isEqualTo: title)
         .where('authour', isEqualTo: authour)
         .get()
         .then((value) {
-      value.docs.forEach((element) {
-        FirebaseFirestore.instance
-            .collection("Books")
-            .doc(element.id)
-            .delete()
-            .then((value) {
-          print("Success!");
-        }).catchError((error) => print("Failed to delete book: $error"));
-      });
-    }).catchError((error) => print("Failed to delete book: $error"));
+          value.docs.forEach((element) {
+            FirebaseFirestore.instance
+                .collection("Books")
+                .doc(element.id)
+                .delete()
+                .then((value) {
+              print("Success!");
+            }).catchError((error) => print("Failed to delete book: $error"));
+          });
+        })
+        .then((value) => Navigator.pushNamedAndRemoveUntil(
+            context, DisplayBooks.id, (route) => false))
+        .catchError((error) => print("Failed to delete book: $error"));
   }
 
   @override
@@ -146,7 +151,6 @@ class _DisplayBooksState extends State<DisplayBooks> {
                             ),
                             onPressed: () {
                               // showAlertDialog(context);
-                              print("edit book : ${_books[i].title}");
                               Navigator.pushNamed(context, BookScreen.id,
                                   arguments: {'book': _books[i]});
                             },
@@ -158,7 +162,7 @@ class _DisplayBooksState extends State<DisplayBooks> {
                             onPressed: () {
                               // showAlertDialog(context);
                               deleteBookRecord(
-                                  _books[i].title, _books[i].authour);
+                                  _books[i].title, _books[i].authour, context);
                             },
                           ),
                         ),

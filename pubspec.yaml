@@ -33,6 +33,9 @@ dependencies:
   excel: ^1.1.5
   universal_html: ^1.2.4
   firebase: ^8.0.0
+  flutter_web_scrollbar: ^0.0.3
+  assets_audio_player: ^2.0.13+1
+
 
 
 

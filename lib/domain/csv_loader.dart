@@ -31,13 +31,20 @@ class CsvLoader {
   Book excelAddPages({Uint8List file, Book book}) {
     var bytes = file.buffer.asUint8List(file.offsetInBytes, file.lengthInBytes);
     var excel = Excel.decodeBytes(bytes);
-
+    //Assuming correct would prefer json
     for (var table in excel.tables.keys) {
       for (var row in excel.tables[table].rows) {
-        if (row[0].toString().toLowerCase() != "title" &&
-            row[0].toString().toLowerCase() != "authour") {
-          print(row[1]);
-          book.add_page(BookPage(pageNumber: row[0].toString(), text: row[1]));
+        if (row[1].toString().toLowerCase() != "page" ||
+            row[2].toString().toLowerCase() != "text") {
+          print(row[2]);
+          book.add_page(
+            BookPage(
+              pageNumber: row[1].toString(),
+              text: row[2],
+              startTime: row[3],
+              endTime: row[4],
+            ),
+          );
         }
       }
     }

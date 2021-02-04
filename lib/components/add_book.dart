@@ -7,6 +7,7 @@ import 'package:joey_books_admin_app/domain/objects/book_page.dart';
 import 'package:joey_books_admin_app/components/file_picker.dart';
 import 'package:joey_books_admin_app/domain/csv_loader.dart';
 import 'package:joey_books_admin_app/domain/book_brain.dart';
+import 'package:joey_books_admin_app/screens/display_books_screen.dart';
 
 class AddBook extends StatefulWidget {
   FunctionStringCallback title;
@@ -23,10 +24,11 @@ class AddBook extends StatefulWidget {
 }
 
 class _AddBookState extends State<AddBook> {
-  void uploadFile(Uint8List value) {
+  void uploadFile(Uint8List value) async {
     List<Book> books = CsvLoader().excelToBooks(value);
-    BookBrain().uploadBooks(books);
-    Navigator.pop(context);
+    await BookBrain().uploadBooks(books);
+    Navigator.pushNamedAndRemoveUntil(
+        context, DisplayBooks.id, (route) => false);
   }
 
   List<BookPage> bookPages;

@@ -6,6 +6,7 @@ class Book {
   String blurb;
   String age;
   String tags;
+  String bookMp3Url;
 
   List<BookPage> pages = [];
 
@@ -15,6 +16,7 @@ class Book {
     this.blurb,
     this.age,
     this.tags,
+    this.bookMp3Url,
   });
 
   add_page(BookPage page) {
